@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, useRef} from 'react';
 import {
     AppBar,
     Toolbar,
@@ -14,10 +14,12 @@ import {
     ListItemText,
     ListItemIcon,
     Collapse,
+    Popover,
+    MenuItem as MenuItemMui
 
     } from '@mui/material';
-    import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-    import { drawerMenu } from '../../constants/menu';
+    import { Outlet, useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';
+    import { drawerMenu, popMenu } from '../../constants/menu';
     import MenuIcon from "@mui/icons-material/Menu"
     import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
     import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -116,6 +118,50 @@ import {
         )
         }
 
+        const MenuPopover = ({children, sx, ...other}) => {
+            return(
+            <Popover
+            anchorOrigin={{vertical: "bottom", horizontal: "right"}}
+            transformOrigin={{ vertical: "top", horizontal: "right"}}
+            paperProps={{sx}}
+            {...other}
+            >
+            {children}
+            </Popover>
+            )
+            }
+            
+            const PopMenu = () => {
+                const navigate = useNavigate()
+                const menuRef = useRef(null)
+                const [open, setOpen] = useState(false)
+                return(
+                <Box>
+                <IconButton
+                size="small"
+                sx={{ ml: 2 }}
+                onClick={()=>setOpen(true)}
+                ref={menuRef}
+                >
+                <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                </IconButton>
+                <MenuPopover open={open} onClose={()=>setOpen(false)}
+                anchorEl={menuRef.current} sx={{marginTop: 2.5, marginLeft: 0.5,
+                overflow:'inherit', boxShadow:'1px, 1px, 2px, 2px rgb(0 0 0 / 20%)',
+                width: 320}} >
+                {popMenu.map(item=>(
+                <MenuItemMui key={item.title} to={item.path}
+                component={RouterLink} onClick={()=>setOpen(false)} sx={{py:1, px:2.5}}
+                >
+                <ListItemText disableTypography>{item.title}</ListItemText>
+                </MenuItemMui>
+                ))}
+                </MenuPopover>
+                </Box>
+                )
+                }
+                
+
 const DashboardLayout = () => {
     const [open, setOpen] = useState(false)
     return (
@@ -126,6 +172,9 @@ const DashboardLayout = () => {
         pr: '24px',
         }}
         >
+            <Box px={2} sx={{cursor:'pointer'}} >
+            <MenuIcon sx={{color:"white"}} onClick={()=>setOpen(true)}/>
+            </Box>
         <Typography
         component="h1"
         variant="h6"
@@ -133,14 +182,9 @@ const DashboardLayout = () => {
         noWrap
         sx={{ flexGrow: 1 }}
         >
-        Pilar Tecno Web - Dario Marconi
+        Pilar Tecno Web - Trabajo Práctico N°1 de Dario Marconi
         </Typography>
-        <IconButton
-        size="small"
-        sx={{ ml: 2 }}
-        >
-        <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-        </IconButton>
+        <PopMenu/>
         </Toolbar>
         </AppBar>
         <SideMenu open={open} onClose={()=>setOpen(false)} />

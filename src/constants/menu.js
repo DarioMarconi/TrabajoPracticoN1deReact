@@ -17,3 +17,10 @@ export const drawerMenu = [
     ]
     }
     ]
+
+    export const popMenu = [
+        {
+        title: "inicio",
+        path: "/",
+        },
+        ]
