@@ -4,7 +4,13 @@ Grid,
 Paper,
 Box
 } from '@mui/material';
+import {useSelector, useDispatch} from "react-redux";
+    import { appSelector, appActions } from '../../redux/appRedux';
 const Dashboard = () => {
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        dispatch(appActions.setPageTitle('TABLERO'))
+        },[])
 return (
 <Grid container spacing={3}>
 <Grid item md={12} xs={12}>
