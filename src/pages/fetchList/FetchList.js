@@ -19,7 +19,7 @@ const FetchList = () => {
     const [next, setNext] = useState(null)
 
     useEffect(()=>{
-        dispatch(appActions.setPageTitle('LISTAS'))
+        dispatch(appActions.setPageTitle('LISTAS DE POKEMOS'))
         getPokemons()
         },[])
 

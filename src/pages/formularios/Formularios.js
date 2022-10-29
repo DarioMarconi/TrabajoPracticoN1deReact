@@ -35,7 +35,7 @@ const Formularios = () => {
     const [errors, setError] = useState(initialErrors)
     const todo = useSelector(appSelector.todo)
     useEffect(()=>{
-        dispatch(appActions.setPageTitle('Pagina de Tareas'))
+        dispatch(appActions.setPageTitle('FORMULARIOS'))
     },[])
     const handleChange= (e) =>{
          setData(prev=>{
@@ -52,14 +52,14 @@ const Formularios = () => {
             setError(err=>{
                 return({
                     ...errors,
-                    tarea: '¡La tarea no puede estar vacia!'
+                    tarea: 'La Tarea no puede estar vacio'
                 })
             })
         }else if(!data.detalle){
             setError(err=>{
                 return({
                     ...errors,
-                    detalle: '¡El detalle no puede estar vacio!'
+                    detalle: 'El detalle no puede estar vacio'
                 })
             })
         }else{
@@ -77,13 +77,13 @@ const Formularios = () => {
    <Grid container spacing={3}>
     <Grid item md={12} xs={12}>
     <Card>
-        <CardHeader title="Agrega una tarea" />
+        <CardHeader title="Formulario" />
         <CardContent>
             
           <Stack sx={{justifyContent:'space-around'}} direction='row'>
             <Grid item md={6}>
                 <FormControl required={true} error={true}>
-                    <TextField initialValue={data.tarea} name={'tarea'} label="Agrega una tarea aqui" variant="outlined"
+                    <TextField initialValue={data.tarea} name={'tarea'} label="Tarea" variant="outlined"
                     onBlur={handleChange} />
                     {
                         errors.tarea && (<FormHelperText id="my-helper-text">{errors.tarea}</FormHelperText>)
@@ -93,7 +93,7 @@ const Formularios = () => {
             </Grid>
             <Grid item md={6}>
                 <FormControl required={true} error={true}>
-                    <TextField initialValue={data.detalle} name={'detalle'} label="Agrega un detalle aqui" variant="outlined"
+                    <TextField initialValue={data.detalle} name={'detalle'} label="detalle" variant="outlined"
                     onBlur={handleChange} />
                     {
                         errors.detalle && (<FormHelperText id="my-helper-text">{errors.detalle}</FormHelperText>)

@@ -4,6 +4,10 @@ export const drawerMenu = [
     path: "/",
     },
     {
+        title: "formularios",
+        path: "/forms",
+        },
+    {
     title: "pages",
     children: [
     {
