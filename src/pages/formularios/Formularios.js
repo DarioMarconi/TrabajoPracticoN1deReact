@@ -77,7 +77,7 @@ const Formularios = () => {
    <Grid container spacing={3}>
     <Grid item md={12} xs={12}>
     <Card>
-        <CardHeader title="Formulario" />
+        <CardHeader title="Formularios" />
         <CardContent>
             
           <Stack sx={{justifyContent:'space-around'}} direction='row'>
