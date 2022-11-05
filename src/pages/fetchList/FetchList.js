@@ -7,21 +7,55 @@ Card,
 CardContent,
 Typography,
 CardMedia,
+Dialog,
+DialogTitle,
+DialogContent,
+IconButton,
+Accordion,
+AccordionSummary,
+AccordionDetails,
+Avatar,
+
 } from '@mui/material';
 import {useSelector, useDispatch} from "react-redux";
 import {appSelector, appActions } from '../../redux/appRedux';
 import api, {IMG_URL} from '../../services/api'
 import POKE_IMG from '../../assets/images/poke.png'
+import CloseIcon from '@mui/icons-material/Close'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+
 
 const FetchList = () => {
     const dispatch = useDispatch()
     const [pokemons, setPokemons] = useState(null)
     const [next, setNext] = useState(null)
+    const [open, setOpen] = React.useState(false);
+    const [data, setData] = useState(null);
 
     useEffect(()=>{
         dispatch(appActions.setPageTitle('LISTAS DE POKEMOS'))
         getPokemons()
         },[])
+
+        const handleClickOpen = async (url) => {
+            try {
+                //dispatch(appActions.loading(true))
+                const result = await api.GET(url)
+                if(result){
+                    console.log('poke data: ', result)
+                    setData(result)
+                    setOpen(true)
+                }
+            } catch (error) {
+                console.log(error)
+            } finally {
+             //dispatch(appActions.loading(false))
+                }
+        };
+        
+        const handleClose = () =>{
+            setData(false);
+        }
 
         const getPokemons = async () => {
             try {
@@ -72,7 +106,9 @@ const FetchList = () => {
             const imgID = getPokemonImgId(path[6])
             return(
             <Card p={2} sx={{ display: 'flex', height:100, cursor:'pointer',
-            '&:hover': {backgroundColor: '#5acdbd', color:'white'}}}>
+            '&:hover': {backgroundColor: '#5acdbd', color:'white'}}}
+            onClick={()=>handleClickOpen(item.url)}
+            >
             <CardContent sx={{ flex: '1 0 auto' }}>
             <Typography component="div" variant="h5">
             N° {path[6]}
@@ -91,7 +127,8 @@ const FetchList = () => {
             )
             }
 return (
-<Grid container spacing={3}>
+    <>
+    <Grid container spacing={3}>
 <Grid item xs={12}>
 <Typography component="div" variant="h5">
 Mi Pokedex
@@ -124,6 +161,81 @@ alt="Live from space album cover"
 </Card>
 </Grid>
 </Grid>
+<Dialog onClose={handleClose}
+aria-labelledby="customized-dialog-title"
+open={open}
+>
+<BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+    {data?data.name:'_'} 
+</BootstrapDialogTitle>
+<DialogContent dividers>
+<Accordion sx={{width:'50wv'}}>
+<AccordionSummary
+    expandIcon={<ExpandMoreIcon />}
+    aria-controls="panel1a-content"
+    id="panel1a-header"
+    >
+    <Typography>
+        Habilidades
+    </Typography>
+</AccordionSummary>
+<AccordionDetails>
+ {data && data.abilities && data.abilities.map((h,index)=>(
+    <Typography>
+        {h.ability.name}
+    </Typography>
+))} 
+</AccordionDetails>
+</Accordion>
+<Accordion>
+<AccordionSummary
+    expandIcon={<ExpandMoreIcon />}
+    aria-controls="panel1a-content"
+    id="panel1a-header"
+    >
+    <Typography>
+        Movimientos
+    </Typography>
+</AccordionSummary>
+<AccordionDetails>
+ {data && data.moves && data.moves.map((m,index)=>(
+    <Typography>
+        {m.move.name}
+    </Typography>
+))} 
+</AccordionDetails>
+</Accordion>
+
+</DialogContent>
+ 
+</Dialog>
+    </>
+
 );
 };
 export default FetchList;
+
+function BootstrapDialogTitle(props){
+    const {children, onClose, ...other} = props;
+
+    return (
+        <DialogTitle sx={{m: 0, p: 2}}{...other}>
+            {children}
+            {onClose ? (
+                <IconButton
+                arial-lable="close"
+                onClick={onClose}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                }}
+                >
+                    <CloseIcon/> 
+                </IconButton>
+
+            ) : null}
+        </DialogTitle>
+    )
+}
