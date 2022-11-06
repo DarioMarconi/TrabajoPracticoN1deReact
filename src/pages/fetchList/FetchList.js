@@ -16,6 +16,7 @@ AccordionSummary,
 AccordionDetails,
 Avatar,
 
+
 } from '@mui/material';
 import {useSelector, useDispatch} from "react-redux";
 import {appSelector, appActions } from '../../redux/appRedux';
@@ -166,7 +167,12 @@ aria-labelledby="customized-dialog-title"
 open={open}
 >
 <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-    {data?data.name:'_'} 
+    {data?data.name:'_'}
+    <Avatar alt={data?.name}
+			            src={data?.sprites.front_default}
+						sx={{width: 150, height: 150}}
+				>P 
+                </Avatar>
 </BootstrapDialogTitle>
 <DialogContent dividers>
 <Accordion sx={{width:'50wv'}}>
